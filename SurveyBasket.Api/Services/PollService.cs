@@ -30,8 +30,6 @@ namespace SurveyBasket.Api.Services
             var currentPool=Get(id);
             if (currentPool is null)
                 return false;
-            currentPool.Title = poll.Title;
-            currentPool.Description = poll.Description;
             return true;
 
         }
