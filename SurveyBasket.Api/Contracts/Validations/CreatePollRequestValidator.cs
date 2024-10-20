@@ -11,7 +11,9 @@ namespace SurveyBasket.Api.Contracts.Validations
                 .Length(3, 15);
             RuleFor(x => x.Description)
                 .NotEmpty()
+                .When(x=>x.Description.EndsWith("Thanks"))
                 .Length(3, 100);
+            
         }
     }
 }
