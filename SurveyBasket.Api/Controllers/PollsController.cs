@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
 namespace SurveyBasket.Api.Controllers
 {
 
@@ -17,7 +19,7 @@ namespace SurveyBasket.Api.Controllers
         public IActionResult GetAll()
         {
             var polls=_pollService.GetAll();
-            var pollsResponse = polls.Adapt<PollResponse>();
+            var pollsResponse = polls.Adapt<IEnumerable<PollResponse> >();
             return Ok(pollsResponse);
         }
         [HttpGet("{id}")] 
@@ -29,9 +31,10 @@ namespace SurveyBasket.Api.Controllers
             return Poll is null ? NotFound():Ok(pollResponse);
         }
         [HttpPost]
-        public IActionResult Add([FromBody] CreatePollRequest poll)
+        public IActionResult Add([FromBody] CreatePollRequest request)
         {
-            var pollRequest = poll.Adapt<Poll>();
+           
+            var pollRequest = request.Adapt<Poll>();
             var newPoll= _pollService.Add(pollRequest);
             return CreatedAtAction(nameof(Get), new { id = newPoll.Id }, newPoll);
         }

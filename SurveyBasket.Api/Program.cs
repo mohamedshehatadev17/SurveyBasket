@@ -1,4 +1,6 @@
+using FluentValidation.AspNetCore;
 using MapsterMapper;
+using SurveyBasket.Api.Contracts.Validations;
 using SurveyBasket.Api.Services;
 using System.Reflection;
 
@@ -16,6 +18,10 @@ builder.Services.AddScoped<IPollService, PollService>();
 var mappingConfig = TypeAdapterConfig.GlobalSettings;
 mappingConfig.Scan(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<IMapper>(new Mapper(mappingConfig));
+// Fluent Validations
+builder.Services
+    .AddFluentValidationAutoValidation()
+    .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
