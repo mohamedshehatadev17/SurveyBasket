@@ -1,24 +1,26 @@
 ﻿using FluentValidation.AspNetCore;
 using MapsterMapper;
+using SurveyBasket.Api.Persistence;
 using System.Reflection;
 
 namespace SurveyBasket.Api
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDependencies(this IServiceCollection services)
+        public static IServiceCollection AddDependencies(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddControllers();
-            services
-                .AddSwaggerServices()
+			var connectionString = configuration.GetConnectionString("DefaultConnection") ??
+            throw new InvalidOperationException("connectionString 'DefaultConnection' not found.");
+			services.AddDbContext<ApplicationDbContext>(options =>
+			options.UseSqlServer(connectionString));
+
+			services
+				.AddSwaggerServices()
                 .AddFluentValidationsConfig()
                 .AddMapster();
             services.AddScoped<IPollService, PollService>();
-
-        
-
-
-            return services;
+			return services;
         }
         public static IServiceCollection AddSwaggerServices(this IServiceCollection services)
         {
