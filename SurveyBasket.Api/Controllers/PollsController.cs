@@ -1,11 +1,8 @@
 ﻿
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Threading;
-
 namespace SurveyBasket.Api.Controllers
 {
 
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class PollsController : ControllerBase
     {
