@@ -14,7 +14,7 @@ namespace SurveyBasket.Api
         public static IServiceCollection AddDependencies(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddControllers();
-            services.AddAuthConfig();
+            services.AddAuthConfig(configuration);
 
 
 			var connectionString = configuration.GetConnectionString("DefaultConnection") ??
@@ -53,12 +53,16 @@ namespace SurveyBasket.Api
                 .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             return services;
         }
-		private static IServiceCollection AddAuthConfig(this IServiceCollection services)
+		private static IServiceCollection AddAuthConfig(this IServiceCollection services,
+            IConfiguration configuration)
 		{
             // Fluent Validations
+            services.AddSingleton<IJwtProvider,JwtProvider>();
+            services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddSingleton<IJwtProvider,JwtProvider>();
 
             services.AddAuthentication(options =>
             {
@@ -75,11 +79,12 @@ namespace SurveyBasket.Api
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("jQYT3G0Guxa1o7tK3nStKdpgeX2B2sJ8")),
-                        ValidIssuer = "SurveyBasketApp",
-                        ValidAudience = "SurveyBasketApp users",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)),
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"]
                     };
                 });
+         
 			return services;
 		}
 	}
