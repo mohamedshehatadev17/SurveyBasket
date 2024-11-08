@@ -59,8 +59,14 @@ namespace SurveyBasket.Api
             services.AddIdentity<ApplicationUser, IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();
             // Fluent Validations
+            
             services.AddSingleton<IJwtProvider,JwtProvider>();
-            services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+            
+            //services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+            services.AddOptions<JwtOptions>()
+                .BindConfiguration(JwtOptions.SectionName)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
             var JwtSettings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
 
 
