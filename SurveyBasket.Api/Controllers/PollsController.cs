@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SurveyBasket.Api.Controllers
 {
+
+    [Authorize]
 	[Route("api/[controller]")]
     [ApiController]
     public class PollsController : ControllerBase
