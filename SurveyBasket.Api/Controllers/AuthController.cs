@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using SurveyBasket.Api.Errors;
 
 namespace SurveyBasket.Api.Controllers
 {
@@ -14,8 +15,8 @@ namespace SurveyBasket.Api.Controllers
 		public async Task<IActionResult> LoginAsync([FromBody]LoginRequest request,CancellationToken cancellationToken)
 		{
 			var authResult = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
-			
-			return authResult is null ? BadRequest("Invalid Email/Password"):Ok(authResult);
+
+            return authResult.IsFailure ? Ok(authResult.Value) : BadRequest(UserErrors.InvalidCredentials);
 		}
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)

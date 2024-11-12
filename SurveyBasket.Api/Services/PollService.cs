@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Http.HttpResults;
 using SurveyBasket.Api.Entities;
+using SurveyBasket.Api.Errors;
 using SurveyBasket.Api.Persistence;
 using System.Collections.Generic;
 using System.Threading;
@@ -17,8 +18,13 @@ namespace SurveyBasket.Api.Services
 		public async Task<IEnumerable<Poll>> GetAllAsync(CancellationToken cancellationToken) =>
 			await _context.Polls.AsNoTracking().ToListAsync();
 
-		public async Task<Poll?> GetAsync(int id, CancellationToken cancellationToken) =>
-			await _context.Polls.FindAsync(id);
+		public async Task<Result<PollResponse>> GetAsync(int id, CancellationToken cancellationToken)
+		{
+			var poll = await _context.Polls.FindAsync(id);
+			return poll is not null
+				? Result.Success(poll.Adapt<PollResponse>())
+				: Result.Failure<PollResponse>(PollErrors.PollNotFound);
+		}
 
 
 		public async Task<Poll> AddAsync(Poll poll, CancellationToken cancellationToken) 
@@ -28,17 +34,17 @@ namespace SurveyBasket.Api.Services
 			return poll;
 		}
 
-		public async Task<bool> UpdateAsync(int id, Poll poll, CancellationToken cancellationToken )
+		public async Task<Result> UpdateAsync(int id, PollRequest poll, CancellationToken cancellationToken = default);
 		{
-			var currentPool = await GetAsync(id,cancellationToken);
+			var currentPool = await _context.Polls.FindAsync(id);
 			if (currentPool is null)
-				return false;
+				return Result.Failure(PollErrors.PollNotFound);
 			currentPool.Title = poll.Title;
 			currentPool.Summary = poll.Summary;
 			currentPool.StartsAt = poll.StartsAt;
 			currentPool.EndsAt = poll.EndsAt;
 			await _context.SaveChangesAsync(cancellationToken);
-			return true;
+			return Result.Success();
 
 		}
 

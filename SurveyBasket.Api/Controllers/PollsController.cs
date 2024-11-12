@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
+using SurveyBasket.Api.Errors;
 
 namespace SurveyBasket.Api.Controllers
 {
@@ -23,11 +24,10 @@ namespace SurveyBasket.Api.Controllers
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
-		{
-            var Poll = await _pollService.GetAsync(id,cancellationToken);
-            var pollResponse = Poll.Adapt<PollResponse>();
+		{ 
+            var result = await _pollService.GetAsync(id,cancellationToken);
 
-            return Poll is null ? NotFound() : Ok(pollResponse);
+            return result.IsSuccess ? Ok(result) : BadRequest(PollErrors.PollNotFound);
         }
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] PollRequest request,CancellationToken cancellationToken )
@@ -37,16 +37,14 @@ namespace SurveyBasket.Api.Controllers
             return CreatedAtAction(nameof(Get), new { id = newPoll.Id }, newPoll.Adapt<PollResponse>());
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PollRequest poll,CancellationToken cancellationToken)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PollRequest request,CancellationToken cancellationToken)
         {
-            var pollRequest = poll.Adapt<Poll>();
-            var isUpdated = await _pollService.UpdateAsync(id, pollRequest, cancellationToken);
-            if (!isUpdated)
-                return NotFound();
+            var result = await _pollService.UpdateAsync(id, request, cancellationToken);
 
-            return NoContent();
-        }
-        [HttpDelete("{id}")]
+		 return result.IsSuccess ? NoContent() : NotFound(PollErrors.PollNotFound);
+
+		}
+		[HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
         {
             var isDeleted = await _pollService.DeleteAsync(id, cancellationToken);
