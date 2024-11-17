@@ -1,7 +1,7 @@
-﻿namespace SurveyBasket.Api.Errors
+﻿namespace SurveyBasket.Errors;
+
+public static class PollErrors
 {
-	public class PollErrors
-	{
-		public static readonly Error PollNotFound = new Error("Poll.NotFound", "No Poll was found with the given ID");
-	}
+    public static readonly Error PollNotFound =
+        new("Poll.NotFound", "No poll was found with the given ID");
 }

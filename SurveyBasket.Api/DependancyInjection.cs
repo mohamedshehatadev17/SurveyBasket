@@ -1,8 +1,8 @@
 ﻿using FluentValidation.AspNetCore;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using SurveyBasket.Api.Authentication;
-using SurveyBasket.Api.Persistence;
+using SurveyBasket.Authentication;
+using SurveyBasket.Persistence;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;

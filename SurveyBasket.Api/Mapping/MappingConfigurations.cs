@@ -1,10 +1,8 @@
-﻿namespace SurveyBasket.Api.Mapping
+﻿namespace SurveyBasket.Mapping;
+
+public class MappingConfigurations : IRegister
 {
-    public class MappingConfigurations : IRegister
+    public void Register(TypeAdapterConfig config)
     {
-        public void Register(TypeAdapterConfig config)
-        {
-           
-        }
     }
 }

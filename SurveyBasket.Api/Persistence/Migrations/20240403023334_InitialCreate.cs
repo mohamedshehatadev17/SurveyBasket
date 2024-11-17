@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SurveyBasket.Api.Persistance.Migrations
+namespace SurveyBasket.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -17,7 +17,7 @@ namespace SurveyBasket.Api.Persistance.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Summary = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
                     StartsAt = table.Column<DateOnly>(type: "date", nullable: false),

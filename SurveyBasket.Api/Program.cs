@@ -1,10 +1,7 @@
-using SurveyBasket.Api;
-using SurveyBasket.Api.Persistence;
+using SurveyBasket;
 
 var builder = WebApplication.CreateBuilder(args);
 
- 
-// Add services to the container.
 builder.Services.AddDependencies(builder.Configuration);
 
 var app = builder.Build();
@@ -17,8 +14,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseCors();
+
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SurveyBasket.Api.Persistance.Migrations
+namespace SurveyBasket.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAuditColumnsToPullTable : Migration
+    public partial class AddAuditColumnsToPollsTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,14 +25,8 @@ namespace SurveyBasket.Api.Persistance.Migrations
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "UpdatedById",
-                table: "Polls",
-                type: "datetime2",
-                nullable: true);
-
             migrationBuilder.AddColumn<string>(
-                name: "UpdatedById1",
+                name: "UpdatedById",
                 table: "Polls",
                 type: "nvarchar(450)",
                 nullable: true);
@@ -49,9 +43,9 @@ namespace SurveyBasket.Api.Persistance.Migrations
                 column: "CreatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Polls_UpdatedById1",
+                name: "IX_Polls_UpdatedById",
                 table: "Polls",
-                column: "UpdatedById1");
+                column: "UpdatedById");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Polls_AspNetUsers_CreatedById",
@@ -62,9 +56,9 @@ namespace SurveyBasket.Api.Persistance.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Polls_AspNetUsers_UpdatedById1",
+                name: "FK_Polls_AspNetUsers_UpdatedById",
                 table: "Polls",
-                column: "UpdatedById1",
+                column: "UpdatedById",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id");
         }
@@ -77,7 +71,7 @@ namespace SurveyBasket.Api.Persistance.Migrations
                 table: "Polls");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Polls_AspNetUsers_UpdatedById1",
+                name: "FK_Polls_AspNetUsers_UpdatedById",
                 table: "Polls");
 
             migrationBuilder.DropIndex(
@@ -85,7 +79,7 @@ namespace SurveyBasket.Api.Persistance.Migrations
                 table: "Polls");
 
             migrationBuilder.DropIndex(
-                name: "IX_Polls_UpdatedById1",
+                name: "IX_Polls_UpdatedById",
                 table: "Polls");
 
             migrationBuilder.DropColumn(
@@ -98,10 +92,6 @@ namespace SurveyBasket.Api.Persistance.Migrations
 
             migrationBuilder.DropColumn(
                 name: "UpdatedById",
-                table: "Polls");
-
-            migrationBuilder.DropColumn(
-                name: "UpdatedById1",
                 table: "Polls");
 
             migrationBuilder.DropColumn(
