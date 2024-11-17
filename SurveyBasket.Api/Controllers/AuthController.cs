@@ -1,4 +1,6 @@
-﻿namespace SurveyBasket.Controllers;
+﻿using SurveyBasket.Api.Abstractions;
+
+namespace SurveyBasket.Controllers;
 
 [Route("[controller]")]
 [ApiController]
@@ -12,13 +14,15 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         var authResult = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
 
-        return authResult.IsSuccess ? Ok(authResult.Value) : Problem(statusCode: StatusCodes.Status400BadRequest, title: authResult.Error.Code, detail: authResult.Error.Description);
+        return authResult.IsSuccess
+            ? Ok(authResult.Value)
+            : authResult.ToProblem(StatusCodes.Status400BadRequest);
 
-        //return authResult.Match(
-        //    Ok,
-        //    error => Problem(statusCode: StatusCodes.Status400BadRequest, title: error.Code, detail: error.Description)
-        //);
-    }
+		//return authResult.Match(
+		//    Ok,
+		//    error => Problem(statusCode: StatusCodes.Status400BadRequest, title: error.Code, detail: error.Description)
+		//);
+	}
 
     [HttpPost("refresh")]
     public async Task<IActionResult> RefreshAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
