@@ -1,4 +1,4 @@
-# Survey Basket: A Comprehensive Survey Management System
+# Survey Basket: Survey Management System
 
 The Survey Basket is a robust and efficient system designed for creating, managing, and analyzing surveys. Built with the **.NET framework**, this project streamlines the process of gathering valuable data and insights from users, customers, or stakeholders, making it an ideal solution for businesses, educational institutions, and research organizations.
 
