@@ -3,85 +3,9 @@
 The Survey Basket is a robust and efficient system designed for creating, managing, and analyzing surveys. Built with the **.NET framework**, this project streamlines the process of gathering valuable data and insights from users, customers, or stakeholders, making it an ideal solution for businesses, educational institutions, and research organizations.
 
 ---
-@startuml
-skinparam style strict
-
-actor "Survey Creator" as Creator
-participant "Frontend/UI" as Frontend
-box "Backend System" #LightBlue
-    participant "API (ASP.NET Core)" as API
-    participant "Database (SQL Server)" as DB
-    participant "Background Job Processor" as BGP
-end box
-participant "Email Service" as Email
-
-title Sequence Diagram: Survey Creation & Invitation
-
-Creator -> Frontend: Access Login Page
-Frontend -> API: POST /auth/login (credentials)
-API -> DB: Query User Credentials
-DB --> API: User Data (or Error)
-API --> Frontend: JWT Token / Session Cookie (or Error)
-Frontend --> Creator: Login Success / Redirect
-
-Creator -> Frontend: Navigate to Create Survey Page
-Frontend -> API: GET /survey/templates (with Auth Token)
-API -> DB: Fetch Survey Templates
-DB --> API: Survey Templates
-API --> Frontend: Survey Templates
-
-Creator -> Frontend: Design Survey & Submit
-Frontend -> API: POST /survey (Survey Data, with Auth Token)
-API -> DB: Save New Survey Data
-DB --> API: Survey ID
-API --> Frontend: Survey Created Confirmation (Survey ID)
-
-Creator -> Frontend: Invite Participants
-Frontend -> API: POST /survey/{id}/invite (Participant List, with Auth Token)
-API -> BGP: Schedule "Send Invitation Emails" Job (Survey ID, Participant List)
-API --> Frontend: Invitation Scheduled Confirmation
-
-BGP -> Email: Send Invitation Email (to Participant 1)
-Email --> BGP: Email Sent Confirmation
-
-BGP -> Email: Send Invitation Email (to Participant N)
-Email --> BGP: Email Sent Confirmation
-
-@enduml
-
-@startuml
-skinparam style strict
-
-participant "Participant" as Participant
-participant "Frontend/UI" as Frontend
-box "Backend System" #LightBlue
-    participant "API (ASP.NET Core)" as API
-    participant "Database (SQL Server)" as DB
-end box
-
-title Sequence Diagram: Participant Taking a Survey
-
-Participant -> Email: Receives Survey Invitation Email
-Participant -> Frontend: Click Survey Link (e.g., example.com/survey/{surveyId})
-
-Frontend -> API: GET /survey/{surveyId}
-API -> DB: Query Survey Details
-DB --> API: Survey Data
-API --> Frontend: Survey Data
-
-Frontend --> Participant: Display Survey Questions
-
-Participant -> Frontend: Fill out survey & Submit Responses
-Frontend -> API: POST /survey/{surveyId}/responses (Response Data)
-API -> API: Validate Responses
-API -> DB: Save Response Data
-DB --> API: Response Saved Confirmation
-API --> Frontend: Thank You / Confirmation
-
-Frontend --> Participant: Display Thank You Message
-
-@enduml
-
+Sequence Diagram
+<img width="1036" height="473" alt="image" src="https://github.com/user-attachments/assets/257fad83-9e74-40cc-96a1-14e9bc600015" />
+---
 ### Key Features
 
 * **Survey Creation**: A user-friendly interface for designing customizable surveys with support for various question types, including multiple-choice, short answers, and scales.
